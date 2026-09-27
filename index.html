@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Special Birthday Wish & Elegy</title>
+  <style>
+    :root {
+      --bg-dark: #2b1723;
+      --card-bg: rgba(60, 25, 45, 0.75);
+      --accent-color: #ffb7c5;
+      --gold-color: #ffe4e1;
+      --text-main: #fff0f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #2b1723, #421c32, #1a0a14);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Canvas Fireworks & Background */
+    #canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Floating Flower Petals Animation */
+    .petal {
+      position: fixed;
+      background-color: #ffb7c5;
+      border-radius: 150% 0 150% 0;
+      opacity: 0.6;
+      z-index: 2;
+      pointer-events: none;
+      animation: animatePetal 10s linear infinite;
+    }
+
+    @keyframes animatePetal {
+      0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        top: 110%;
+        transform: translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Music Control Box */
+    .music-control {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 100;
+      background: rgba(60, 25, 45, 0.85);
+      border: 1px solid var(--accent-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .music-btn {
+      background: none;
+      border: none;
+      color: var(--accent-color);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      max-width: 680px;
+      text-align: center;
+      padding: 32px 28px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 183, 197, 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      margin: 20px 0;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--gold-color);
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--accent-color);
+      margin-bottom: 14px;
+    }
+
+    p {
+      line-height: 1.8;
+      font-size: 1.05rem;
+      color: #fce4ec;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #e8a5c8, #c45b8e);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(216, 131, 176, 0.4);
+      transition: all 0.3s ease;
+      margin: 10px 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(216, 131, 176, 0.6);
+    }
+
+    .nav-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .letter-card {
+      background: rgba(35, 12, 25, 0.6);
+      padding: 24px;
+      border-radius: 16px;
+      border-left: 3px solid var(--accent-color);
+      text-align: left;
+      font-size: 1.02rem;
+      line-height: 1.85;
+      margin-top: 15px;
+      white-space: pre-line;
+    }
+
+    /* Cake Styling */
+    .cake {
+      position: relative;
+      width: 180px;
+      height: 110px;
+      background: #e2a8c3;
+      border-radius: 12px 12px 0 0;
+      margin: 50px auto 20px;
+    }
+
+    .cake::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: #f4c5dc;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .candle {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 25px;
+      background: #ffffff;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .flame {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 18px;
+      background: #ffd700;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 12px #ff9800, 0 0 20px #ff5722;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.off { display: none; }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    .night-flowers-box {
+      width: 100%;
+      height: 140px;
+      background: linear-gradient(to top, #1a0a14, #3a152d);
+      border-radius: 16px;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Canvas -->
+  <canvas id="canvas-bg"></canvas>
+
+  <!-- Petals Floating Container -->
+  <div id="petals-container"></div>
+
+  <!-- Control Musik -->
+  <div class="music-control">
+    <button class="music-btn" id="toggle-music-btn" onclick="toggleMusic()">🎵 Putar Musik</button>
+  </div>
+
+  <!-- Audio Lagu (Magnolia - Elegy / Musik Pilihan) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="lagu.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Sound Effect Kembang Api -->
+  <audio id="sfx-firework" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_a15bc8dd18.mp3?filename=firework-show-short-14689.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+
+    <!-- SLIDE 1: AWAL -->
+    <div id="slide-1" class="section active">
+      <div style="padding: 40px 0;">
+        <h1>🌸 Magnolia - Elegy 🌸</h1>
+        <p style="color: #ffb7c5; font-size: 0.95rem; margin-bottom: 25px;">Klik tombol di bawah untuk membuka pesan & menyalakan kembang api</p>
+        <button class="btn" onclick="startExperience()">Buka Ucapan & Lirik</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: INTRO -->
+    <div id="slide-2" class="section">
+      <h1>Special Greetings 🌸</h1>
+      <p>Sending you my warmest wishes and gentle thoughts today.</p>
+      <button class="btn" onclick="nextSlide(3)">Lanjut ke Ucapan</button>
+    </div>
+
+    <!-- SLIDE 3: UCAPAN UTAMA -->
+    <div id="slide-3" class="section">
+      <div class="letter-card">
+Sending you my warmest wishes today and wishing you a very wonderful year ahead! 
+
+Semoga kamu selalu dikelilingi kebaikan, kesehatan, ketenangan hati, serta dilimpahi banyak kebahagiaan dan keberkahan. Semoga segalanya berjalan lebih indah, membawa banyak senyuman baru, dan kamu selalu diberi kemudahan dalam setiap langkah hidupmu hingga semua harapan baikmu bisa terwujud satu per satu. 
+
+Hope this new chapter treats you with so much kindness, enjoy your special day, and please take good care of yourself always!
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="nextSlide(2)">Kembali</button>
+        <button class="btn" onclick="nextSlide(4)">Lanjut ke Lirik Lagu</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: LIRIK BAGIAN 1 -->
+    <div id="slide-4" class="section">
+      <h2>🎵 Magnolia - Elegy (Part 1)</h2>
+      <div class="letter-card">
+Wrecking balls and million stones
+Will never take away
+My strongest will to say
+The words you long to hear
+
+Funny faces in mind
+That came to stay
+With nothing to say
+Maybe I'm trying too hard
+
+Close my eyes and I try
+To see the things
+That I don't wanna see
+Fortunately try to deny
+I want to, I just want to flee
+To flee from this elegy
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="nextSlide(3)">Kembali</button>
+        <button class="btn" onclick="nextSlide(5)">Lanjut</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: LIRIK BAGIAN 2 -->
+    <div id="slide-5" class="section">
+      <h2>🎵 Magnolia - Elegy (Part 2)</h2>
+      <div class="letter-card">
+Those funny faces in mind
+But for me
+Take my money and I'll pay
+For all my sins
+I don't know where to begin
+I do things you've never seen
+
+The art of chasing you
+Leaves me empty for years
+And that's not a metaphor
+For funny faces of mine
+
+I want to, I just want to flee
+To flee from this elegy
+Apology is nothing to you
+My beauty, you're true totally
+Knocking on my broken bones
+Those funny faces in mind
+But for me
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="nextSlide(4)">Kembali</button>
+        <button class="btn" onclick="nextSlide(6)">Lanjut</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: LIRIK BAGIAN 3 (OUTRO) -->
+    <div id="slide-6" class="section">
+      <h2>🎵 Magnolia - Elegy (Outro)</h2>
+      <div class="letter-card">
+Wrecking balls and million stones
+Will never take away
+My strongest will to say
+The words you long to hear
+
+The city's falling down and down
+This very old long way
+I don't need to say more
+The words you long to hear
+
+I don't need to say more, just no more
+The words you long to hear
+My strongest will to say
+The words you long to hear
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="nextSlide(5)">Kembali</button>
+        <button class="btn" onclick="nextSlide(7)">Lanjut ke Penutup</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: PENUTUP, PESAN TERAKHIR & KUE -->
+    <div id="slide-7" class="section">
+      <h2>For You 🌸</h2>
+
+      <!-- PESAN TAMBAHAN -->
+      <div class="letter-card" style="margin-bottom: 25px;">
+Happy birthday to the person I once called mine.
+
+We may not talk anymore, and I don't really know where we stand today, but you were once a very important part of my life. 
+
+Thank you for everything: the memories, the lessons, and even the pain, because all of it shaped me into who I am today. Despite our past, I’ll keep my promise to keep supporting you and cheering for you silently from afar.
+
+I hope today you feel deeply loved, appreciated, and at peace even if that peace doesn't come from me anymore. I wish you growth, genuine happiness, and a life that treats you kindly. Somewhere in my heart, I will always pray that you are safe, okay, and achieving everything you’ve ever hoped for.
+
+Take good care of yourself.
+      </div>
+
+      <p style="font-size:0.95rem; color:#ffcdd2;">Sentuh lilin di atas kue untuk meniupnya:</p>
+      
+      <div class="cake">
+        <div class="candle" onclick="blowCandle()">
+          <div class="flame" id="flame"></div>
+        </div>
+      </div>
+
+      <div class="night-flowers-box">
+        <svg viewBox="0 0 200 120" style="width:100%; height:100%;">
+          <path d="M50 120 C50 80, 40 60, 40 40" stroke="#81c784" stroke-width="3" fill="none"/>
+          <path d="M100 120 C100 70, 110 50, 105 30" stroke="#81c784" stroke-width="3" fill="none"/>
+          <path d="M150 120 C150 85, 160 65, 155 45" stroke="#81c784" stroke-width="3" fill="none"/>
+          
+          <g transform="translate(40,40) scale(0.4)">
+            <path d="M0 0 C-30 -30, -30 -50, 0 -40 C30 -50, 30 -30, 0 0 Z" fill="#ffffff"/>
+            <path d="M0 0 C-40 10, -50 -10, -25 -25 Z" fill="#f8bbd0"/>
+            <path d="M0 0 C40 10, 50 -10, 25 -25 Z" fill="#f8bbd0"/>
+          </g>
+          <g transform="translate(105,30) scale(0.5)">
+            <path d="M0 0 C-30 -30, -30 -50, 0 -40 C30 -50, 30 -30, 0 0 Z" fill="#ff80ab"/>
+            <path d="M0 0 C-40 10, -50 -10, -25 -25 Z" fill="#ff4081"/>
+            <path d="M0 0 C40 10, 50 -10, 25 -25 Z" fill="#ff4081"/>
+          </g>
+          <g transform="translate(155,45) scale(0.38)">
+            <path d="M0 0 C-30 -30, -30 -50, 0 -40 C30 -50, 30 -30, 0 0 Z" fill="#ffffff"/>
+            <path d="M0 0 C-40 10, -50 -10, -25 -25 Z" fill="#f8bbd0"/>
+            <path d="M0 0 C40 10, 50 -10, 25 -25 Z" fill="#f8bbd0"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="nav-btns" style="margin-top: 25px;">
+        <button class="btn" onclick="nextSlide(6)">Kembali</button>
+        <button class="btn" onclick="nextSlide(1)">Mulai Dari Awal</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================
+       1. FIREWORKS & SFX ALGORITHM
+       ========================================== */
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    const sfxFirework = document.getElementById('sfx-firework');
+
+    let width, height;
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let fireworks = [];
+
+    function playFireworkSound() {
+      if (sfxFirework) {
+        sfxFirework.currentTime = 0;
+        sfxFirework.play().catch(e => console.log("SFX blocked", e));
+      }
+    }
+
+    function makeFullCircleFirework(fire) {
+      let color = ['#ff80ab', '#ff4081', '#ffe4e1', '#ffb7c5', '#f8bbd0'][Math.floor(Math.random() * 5)];
+      let velocity = Math.random() * 6 + 6;
+      let fireNumber = 12;
+      let max = fireNumber * 3;
+
+      for (let i = 0; i < max; i++) {
+        let rad = (i * Math.PI * 2) / max;
+        fireworks.push({
+          x: fire.x, 
+          y: fire.y,
+          size: Math.random() + 1.5,
+          fill: color,
+          vx: Math.cos(rad) * velocity + (Math.random() - 0.5) * 0.5,
+          vy: Math.sin(rad) * velocity + (Math.random() - 0.5) * 0.5,
+          ay: 0.06, 
+          alpha: 1,
+          life: Math.round((Math.random() * 20) / 2) + 20
+        });
+      }
+    }
+
+    function launchFireworks() {
+      playFireworkSound();
+      for(let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          makeFullCircleFirework({
+            x: Math.random() * (width * 0.8) + width * 0.1,
+            y: Math.random() * (height * 0.4) + height * 0.1
+          });
+        }, i * 350);
+      }
+    }
+
+    function animateBg() {
+      ctx.fillStyle = 'rgba(43, 23, 35, 0.25)';
+      ctx.fillRect(0, 0, width, height);
+
+      fireworks.forEach((f, index) => {
+        f.x += f.vx;
+        f.y += f.vy;
+        f.vy += f.ay;
+        f.alpha -= 0.015;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, f.alpha);
+        ctx.fillStyle = f.fill;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        if (f.alpha <= 0) {
+          fireworks.splice(index, 1);
+        }
+      });
+
+      requestAnimationFrame(animateBg);
+    }
+    animateBg();
+
+    /* ==========================================
+       2. FLOATING PETALS GENERATOR
+       ========================================== */
+    function createPetals() {
+      const container = document.getElementById('petals-container');
+      for (let i = 0; i < 15; i++) {
+        let petal = document.createElement('div');
+        petal.classList.add('petal');
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.width = (Math.random() * 10 + 10) + 'px';
+        petal.style.height = (Math.random() * 15 + 15) + 'px';
+        petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
+        petal.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(petal);
+      }
+    }
+    createPetals();
+
+    /* ==========================================
+       3. MUSIC & START EXPERIENCE
+       ========================================== */
+    const audio = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('toggle-music-btn');
+
+    function startExperience() {
+      playMusic();
+      launchFireworks();
+      nextSlide(2);
+    }
+
+    function playMusic() {
+      audio.play().then(() => {
+        musicBtn.innerText = "⏸️ Jeda Musik";
+      }).catch(e => console.log("Audio play blocked", e));
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+        musicBtn.innerText = "⏸️ Jeda Musik";
+      } else {
+        audio.pause();
+        musicBtn.innerText = "🎵 Putar Musik";
+      }
+    }
+
+    /* ==========================================
+       4. NAVIGATION
+       ========================================== */
+    function nextSlide(slideId) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(`slide-${slideId}`).classList.add('active');
+    }
+
+    /* ==========================================
+       5. BLOW CANDLE INTERACTION
+       ========================================== */
+    function blowCandle() {
+      document.getElementById('flame').classList.add('off');
+      launchFireworks();
+    }
+  </script>
+</body>
+</html>
